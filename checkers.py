@@ -55,28 +55,18 @@ class Checkers:
         self.list_spaces.append(cell)
 
     def set_pogs(self):
+        #TODO find a smarter way to do this
+        if self.go_first:
+            sideA = 1
+            sideB = 2
+        else:
+            sideA = 2
+            sideB = 1
+
         for i, cell in enumerate(self.list_spaces, start=1):
             if i < 13:
-                cell.addch(1, 3, pog, curses.color_pair(1))
+                cell.addch(1, 3, pog, curses.color_pair(sideA))
             if i > 20:
-                cell.addch(1, 3, pog, curses.color_pair(2))
+                cell.addch(1, 3, pog, curses.color_pair(sideB))
 
             cell.noutrefresh()
-
-def main(screen):
-    Checkers(screen)
-
-    while True:
-        c = screen.getch()
-        if c == ord('q'):
-            break;
-        elif c == ord('r'):
-            screen.erase()
-            curses.beep()
-            Checkers(screen)
-        elif c == ord('p'):
-            screen.clear()
-            screen.addstr(0, 0, str("Hi Bom"), curses.color_pair(1))
-
-if __name__ == '__main__':
-    wrapper(main)
