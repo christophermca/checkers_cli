@@ -3,7 +3,6 @@ import random
 import curses
 
 from curses import wrapper
-import numpy as npy
 
 p1 = [
         [0,0], [0,16], [0,32], [0,48],
@@ -26,6 +25,8 @@ king = u'\u26C3'
 
 class Checkers:
     def __init__(self, screen):
+        curses.curs_set(2)
+
         self.screen = screen
         self.list_spaces = []
         self.init_board()
@@ -34,6 +35,7 @@ class Checkers:
         curses.doupdate()
 
     def init_board(self):
+        curses.getsyx()
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
         self.screen.bkgd(curses.ACS_BOARD, curses.COLOR_BLACK)
@@ -70,3 +72,9 @@ class Checkers:
                 cell.addch(1, 3, pog, curses.color_pair(sideB))
 
             cell.noutrefresh()
+
+    def moveCursor(self):
+        self.board.leaveok(False)
+        [y,x] = self.board.getyx()
+        self.board.move(y+3,x)
+        self.board.refresh()

@@ -3,7 +3,7 @@ from curses import wrapper
 from checkers import Checkers
 
 def main(screen):
-    Checkers(screen)
+    game = Checkers(screen)
 
     while True:
         c = screen.getch()
@@ -15,6 +15,8 @@ def main(screen):
         elif c == ord('p'):
             screen.clear()
             screen.addstr(0, 0, str("Hi Bom"), curses.color_pair(1))
+        elif c == curses.KEY_UP:
+            game.moveCursor()
 
 if __name__ == '__main__':
     wrapper(main)
