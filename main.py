@@ -2,8 +2,16 @@ import curses
 from curses import wrapper
 from checkers import Checkers
 
+def msgboard(screen):
+    msgb = curses.newwin(2, 64, 32, 10)
+    msgb.bkgd(curses.COLOR_BLACK)
+
+    msgb.refresh()
+
 def main(screen):
     game = Checkers(screen)
+    msgboard(screen)
+
 
     while True:
         c = screen.getch()
@@ -16,7 +24,10 @@ def main(screen):
             screen.clear()
             screen.addstr(0, 0, str("Hi Bom"), curses.color_pair(1))
         elif c == curses.KEY_UP:
-            game.moveCursor()
+            game.moveCursor(-3, 0)
+            screen.refresh()
+        elif c == curses.KEY_DOWN:
+            game.moveCursor(3, 0)
 
 if __name__ == '__main__':
     wrapper(main)
