@@ -1,33 +1,34 @@
 import curses
+import time
 from curses import wrapper
 from checkers import Checkers
-
-def msgboard(screen):
-    msgb = curses.newwin(2, 64, 32, 10)
-    msgb.bkgd(curses.COLOR_BLACK)
-
-    msgb.refresh()
+from msg_board import Messenger
 
 def main(screen):
     game = Checkers(screen)
-    msgboard(screen)
-
+    messngr = Messenger(screen)
 
     while True:
         c = screen.getch()
+        messngr.clear()
         if c == ord('q'):
             break;
         elif c == ord('r'):
             curses.beep()
-            Checkers(screen)
+            messngr.send('CLEAR')
+            game = Checkers(screen)
+            time.sleep(1)
+            messngr.clear()
+
         elif c == ord('p'):
-            screen.clear()
-            screen.addstr(0, 0, str("Hi Bom"), curses.color_pair(1))
+            messngr.send('Tada')
+
         elif c == curses.KEY_UP:
-            game.moveCursor(-3, 0)
-            screen.refresh()
+            pass
+            # game.moveCursor(-3, 0)
+            # screen.refresh() lrk
         elif c == curses.KEY_DOWN:
-            game.moveCursor(3, 0)
+            pass
 
 if __name__ == '__main__':
     wrapper(main)
