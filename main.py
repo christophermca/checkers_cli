@@ -4,6 +4,7 @@ from curses import wrapper
 from checkers import Checkers
 from msg_board import Messenger
 
+
 def main(screen):
     game = Checkers(screen)
     messngr = Messenger(screen)
@@ -12,13 +13,13 @@ def main(screen):
     def restart_game():
         curses.beep()
         messngr.send('CLEAR')
-        game = Checkers(screen)
+        Checkers(screen)
         time.sleep(1)
         messngr.clear()
 
     def move_cursor(c):
         messngr.send({
-            'selected':game.board.selected, 'current': game.board.current})
+            'selected': game.board.selected, 'current': game.board.current})
 
         if c == curses.KEY_RIGHT or c == 108:
             game.board.move(1)

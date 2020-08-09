@@ -1,10 +1,5 @@
-import random
 import curses
-from curses import ascii
-import pdb
-
-pog = u'\u25C9'
-king = u'\u26C3'
+from pog import move_pog, contains_pog, set_pogs
 
 
 class Board:
@@ -17,15 +12,13 @@ class Board:
     bottom = ([15, 8], [15, 24], [15, 40], [15, 56], [18, 0], [18, 16],
               [18, 32], [18, 48], [21, 8], [21, 24], [21, 40], [21, 56])
 
-    def __init__(self, screen):
+    def __init__(self, screen, go_first):
         self.current = 13
         self.selected = None
-        go_first = random.randint(0, 1)
-        self.is_users_turn = bool(go_first)
         self.all_spaces = list(sum([self.top, self.mid,  self.bottom], ()))
 
         self.init_board(screen)
-        self.set_pogs(go_first)
+        set_pogs(self, go_first)
 
     def init_board(self, screen):
         curses.use_default_colors()
@@ -42,50 +35,27 @@ class Board:
         self.board.bkgd(curses.ACS_BOARD, curses.color_pair(2))
         self.board.noutrefresh()
 
-        for i, sp in enumerate(self.all_spaces):
-            self.init_cells(*sp, i)
+        def init_cells(y, x, i):
+            cell = self.board.derwin(3, 8, y, x)
+            cell.bkgd(curses.COLOR_BLACK)
 
-    def init_cells(self, y, x, i):
-        cell = self.board.derwin(3, 8, y, x)
-        cell.bkgd(curses.COLOR_BLACK)
-
-        cell.addstr(str(i + 1), curses.COLOR_WHITE)
-        cell.noutrefresh()
-
-        self.all_spaces[i] = cell
-
-    def set_pogs(self, go_first):
-        # TODO find a smarter way to do this
-        if go_first:
-            sideA = 1
-            sideB = 2
-        else:
-            sideA = 2
-            sideB = 1
-
-        self.ai = {"color": curses.color_pair(sideA)}
-        self.team = {"color": curses.color_pair(sideB)}
-
-        for i, cell in enumerate(self.all_spaces, start=1):
-            if i < 13:
-                cell.addch(1, 3, pog, curses.color_pair(sideA))
-            if i > 20:
-                cell.addch(1, 3, pog, curses.color_pair(sideB))
-
+            cell.addstr(str(i + 1), curses.COLOR_WHITE)
             cell.noutrefresh()
+
+            self.all_spaces[i] = cell
+
+        for i, sp in enumerate(self.all_spaces):
+            init_cells(*sp, i)
 
     def reset_cell(self, cell):
         self.all_spaces[cell].bkgd(curses.COLOR_BLACK)
         self.all_spaces[cell].noutrefresh()
 
     def select(self):
-        def contains_pog(space) -> bool:
-            char = self.all_spaces[space].inch(1, 3)
-            return char & 0xFF == ord(pog) & 0xFF
-
         # initial selection
         if self.selected is None:
-            if contains_pog(self.current):
+            char = self.all_spaces[self.current].inch(1, 3)
+            if contains_pog(char, self.current):
                 self.all_spaces[self.current].bkgd(curses.color_pair(4))
                 self.all_spaces[self.current].noutrefresh()
                 self.selected = self.current
@@ -101,11 +71,11 @@ class Board:
             self.reset_cell(self.current)
             return
 
-
         try:
-            if contains_pog(self.selected) is True:
+            char = self.all_spaces[self.selected].inch(1, 3)
+            if contains_pog(char, self.selected):
 
-                self.move_pog()
+                move_pog(self)
                 self.reset_cell(self.selected)
                 self.selected = None
             else:
@@ -113,12 +83,6 @@ class Board:
 
         except (ValueError, TypeError):
             self.reset_cell(self.current)
-
-    def move_pog(self):
-        self.all_spaces[self.selected].delch(1, 3)
-        self.all_spaces[self.selected].noutrefresh()
-        self.all_spaces[self.current].addch(1, 3, pog, self.team.get('color'))
-        self.all_spaces[self.current].noutrefresh()
 
     def move(self, n):
         self.reset_cell(self.current)
