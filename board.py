@@ -64,12 +64,10 @@ class Board:
                 return False
 
         # second selection
-
         # if selecting the previously selected cell
-        if self.selected == self.current:
+        elif self.selected == self.current:
             self.selected = None
             self.reset_cell(self.current)
-            return
 
         try:
             char = self.all_spaces[self.selected].inch(1, 3)
@@ -78,6 +76,7 @@ class Board:
                 move_pog(self)
                 self.reset_cell(self.selected)
                 self.selected = None
+                self.board.refresh()
             else:
                 self.reset_cell(self.current)
 

@@ -6,7 +6,8 @@ from board import Board
 class Checkers:
     def __init__(self, screen):
         # configure curses
-        curses.curs_set(2)
+        curses.curs_set(0)
+
         # game
         self.init_game(screen)
 

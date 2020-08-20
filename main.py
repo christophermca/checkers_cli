@@ -34,21 +34,19 @@ def main(screen):
         # controller
         c = screen.getch()
 
-        move_cursor(c)
-
         if c == ord('q'):
             isRunning = False
         elif c == ord('r'):
             restart_game()
         elif c == ord('p'):
             messngr.send('tada')
-        elif c == curses.KEY_ENTER or c == 10: #or c == 13:
+        elif c == curses.KEY_ENTER or c == 10:  # or c == 13:
             game.board.select()
         else:
-            # use for debug
-            messngr.send("keycode: {}".format(c))
+            move_cursor(c)
 
     curses.endwin()
+
 
 if __name__ == '__main__':
     wrapper(main)
