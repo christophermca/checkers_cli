@@ -21,13 +21,6 @@ class Board:
         set_pogs(self, go_first)
 
     def init_board(self, screen):
-        curses.use_default_colors()
-        curses.init_pair(1, curses.COLOR_WHITE, -1)
-        curses.init_pair(2, curses.COLOR_RED, -1)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_MAGENTA)
-
         screen.bkgd(curses.ACS_BOARD, curses.COLOR_BLACK)
         screen.noutrefresh()
 

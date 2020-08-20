@@ -8,6 +8,14 @@ class Checkers:
         # configure curses
         curses.curs_set(0)
 
+        # colors
+        curses.use_default_colors()
+        curses.init_pair(1, curses.COLOR_WHITE, -1)
+        curses.init_pair(2, curses.COLOR_RED, -1)
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
+        curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_GREEN)
+        curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_MAGENTA)
+
         # game
         self.init_game(screen)
 
