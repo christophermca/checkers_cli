@@ -48,7 +48,7 @@ class Board:
         # initial selection
         if self.selected is None:
             char = self.all_spaces[self.current].inch(1, 3)
-            if contains_pog(char, self.current):
+            if contains_pog(char):
                 self.all_spaces[self.current].bkgd(curses.color_pair(4))
                 self.all_spaces[self.current].noutrefresh()
                 self.selected = self.current
@@ -64,7 +64,8 @@ class Board:
 
         try:
             char = self.all_spaces[self.selected].inch(1, 3)
-            if contains_pog(char, self.selected):
+            curses.endwin()
+            if contains_pog(char):
 
                 move_pog(self)
                 self.reset_cell(self.selected)

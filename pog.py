@@ -4,18 +4,22 @@ pog = u'\u25C9'
 king = u'\u26C3'
 
 
-def contains_pog(char, space) -> bool:
-    return char & 0xFF == ord(pog) & 0xFF
+def contains_pog(char) -> bool:
+    if(char):
+        # curses.A_CHARTEXT is a bitmask and is equal to useing 0xFF to pull
+        # upper bits.
+
+        return char & curses.A_CHARTEXT == ord(pog) & curses.A_CHARTEXT
 
 
-def move_pog(self):
+def move_pog(self) -> None:
     self.all_spaces[self.selected].delch(1, 3)
     self.all_spaces[self.selected].noutrefresh()
     self.all_spaces[self.current].addch(1, 3, pog, self.team.get('color'))
     self.all_spaces[self.current].noutrefresh()
 
 
-def set_pogs(self, go_first):
+def set_pogs(self, go_first) -> None:
     # TODO find a smarter way to do this
     if go_first:
         sideA = 1
