@@ -16,11 +16,12 @@ class Board:
         self.current = 13
         self.selected = None
         self.all_spaces = list(sum([self.top, self.mid,  self.bottom], ()))
+        self.is_turn = go_first
 
-        self.init_board(screen)
-        set_pogs(self, go_first)
+        self.__init_board(screen)
 
-    def init_board(self, screen):
+
+    def __init_board(self, screen):
         screen.bkgd(curses.ACS_BOARD, curses.COLOR_BLACK)
         screen.noutrefresh()
 
@@ -28,17 +29,20 @@ class Board:
         self.board.bkgd(curses.ACS_BOARD, curses.color_pair(2))
         self.board.noutrefresh()
 
-        def init_cells(y, x, i):
-            cell = self.board.derwin(3, 8, y, x)
-            cell.bkgd(curses.COLOR_BLACK)
-
-            cell.addstr(str(i + 1), curses.COLOR_WHITE)
-            cell.noutrefresh()
-
-            self.all_spaces[i] = cell
-
         for i, sp in enumerate(self.all_spaces):
-            init_cells(*sp, i)
+            self.__init_cells(*sp, i)
+
+        set_pogs(self)
+
+
+    def __init_cells(self, y, x, i):
+        cell = self.board.derwin(3, 8, y, x)
+        cell.bkgd(curses.COLOR_BLACK)
+
+        cell.addstr(str(i + 1), curses.COLOR_WHITE)
+        cell.noutrefresh()
+
+        self.all_spaces[i] = cell
 
     def reset_cell(self, cell):
         self.all_spaces[cell].bkgd(curses.COLOR_BLACK)
@@ -66,7 +70,6 @@ class Board:
             char = self.all_spaces[self.selected].inch(1, 3)
             curses.endwin()
             if contains_pog(char):
-
                 move_pog(self)
                 self.reset_cell(self.selected)
                 self.selected = None
@@ -78,6 +81,7 @@ class Board:
             self.reset_cell(self.current)
 
     def move(self, n):
+
         self.reset_cell(self.current)
 
         if self.selected:
@@ -86,4 +90,6 @@ class Board:
 
         self.current += n
         self.all_spaces[self.current].bkgd(curses.color_pair(3))
+        self.is_turn = not(self.is_turn)
+
         return self.all_spaces[self.current].refresh()
