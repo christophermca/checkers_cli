@@ -38,8 +38,8 @@ def main(screen):
             isRunning = False
         elif c == ord('r'):
             restart_game()
-        elif c == ord('p'):
-            messngr.send('tada')
+        elif c == ord('?'):
+            messngr.help()
         elif c == curses.KEY_ENTER or c == 10:  # or c == 13:
             game.board.select()
         else:

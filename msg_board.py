@@ -9,7 +9,11 @@ class Messenger:
         self.board.clear()
         self.board.refresh()
 
-    def send(self, msg):
+    def help(self):
+        help_msg = {"?": "Show Help message", "q": "quit"}
+        self.send(help_msg, "HELP")
+
+    def send(self, msg, title = "Checkers"):
         self.board.clear()
-        self.board.addstr(0, 1, str('(Checkers): {}').format(msg))
+        self.board.addstr(0, 1, str('({}): {}').format(title, msg))
         self.board.refresh()
