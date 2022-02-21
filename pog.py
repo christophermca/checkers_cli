@@ -1,12 +1,16 @@
 import curses
 
+# Side A
 pog = u'\u25C9'
-king = u'\u26C3'
+royal = u'\u265A'
 
+# Side B
+pogB = u'\u25CE'
+royalB = u'\u2654'
 
-##
-# issue with method we cannot verify the color of the char
-# might need to rethink pog
+# royal = u'\u211C'
+# royalB = u'\u211B'
+
 def contains_pog(char) -> bool:
     if(char):
         ###
@@ -15,7 +19,6 @@ def contains_pog(char) -> bool:
         ##
 
         return char & curses.A_CHARTEXT == ord(pog) & curses.A_CHARTEXT
-
 
 def move_pog(self) -> None:
     if self.is_turn:
@@ -47,6 +50,6 @@ def set_pogs(self) -> None:
         if i < 13:
             cell.addch(1, 3, pog, curses.color_pair(sideA))
         if i > 20:
-            cell.addch(1, 3, pog, curses.color_pair(sideB))
+            cell.addch(1, 3, royal, curses.color_pair(sideB))
 
         cell.noutrefresh()
