@@ -1,8 +1,9 @@
 import curses
 import time
+
 from curses import wrapper
-from checkers import Checkers
-from msg_board import Messenger
+from src.checkers import Checkers
+from src.components.msg_board import Messenger
 
 
 def main(screen):
@@ -29,18 +30,19 @@ def main(screen):
         elif c == curses.KEY_DOWN or c == 106:
             game.board.move(4)
 
-    while game.logic.isRunning:
+    while game.logic.get('isRunning'):
         # controller
         c = screen.getch()
 
         if c == ord('q'):
-            game.logic.set_isRunning(False)
+            game.logic.set('isRunning', False)
         elif c == ord('r'):
             restart_game()
         elif c == ord('?'):
             messngr.help()
         elif c == curses.KEY_ENTER or c == 10:  # or c == 13:
             game.board.select()
+            messngr.send({'turn': game.logic.get('is_turn')})
         else:
             move_cursor(c)
 

@@ -1,5 +1,6 @@
 import curses
-from pog import move_pog, contains_pog, set_pogs
+from .pog import move_pog, contains_pog, set_pogs
+import random
 
 
 class Board:
@@ -18,10 +19,10 @@ class Board:
         self.selected = None
         self.all_spaces = list(sum([self.top, self.mid,  self.bottom], ()))
 
-        self.__init_board(screen)
+        self.__init_board__(screen)
 
 
-    def __init_board(self, screen):
+    def __init_board__(self, screen):
         screen.bkgd(curses.ACS_BOARD, curses.COLOR_BLACK)
         screen.noutrefresh()
 
@@ -29,20 +30,21 @@ class Board:
         self.board.bkgd(curses.ACS_BOARD, curses.color_pair(2))
         self.board.noutrefresh()
 
+        def __init_cells__(y, x, i):
+            cell = self.board.derwin(3, 8, y, x)
+            cell.bkgd(curses.COLOR_BLACK)
+
+            cell.addstr(str(i + 1), curses.COLOR_WHITE)
+            cell.noutrefresh()
+
+            self.all_spaces[i] = cell
+
         for i, sp in enumerate(self.all_spaces):
-            self.__init_cells(*sp, i)
+            __init_cells__(*sp, i)
 
         set_pogs(self)
 
 
-    def __init_cells(self, y, x, i):
-        cell = self.board.derwin(3, 8, y, x)
-        cell.bkgd(curses.COLOR_BLACK)
-
-        cell.addstr(str(i + 1), curses.COLOR_WHITE)
-        cell.noutrefresh()
-
-        self.all_spaces[i] = cell
 
     def reset_cell(self, cell):
         self.all_spaces[cell].bkgd(curses.COLOR_BLACK)
@@ -52,7 +54,7 @@ class Board:
         # initial selection
         if self.selected is None:
             char = self.all_spaces[self.current].inch(1, 3)
-            if contains_pog(char):
+            if contains_pog(self, char):
                 self.all_spaces[self.current].bkgd(curses.color_pair(4))
                 self.all_spaces[self.current].noutrefresh()
                 self.selected = self.current
@@ -68,17 +70,22 @@ class Board:
 
         try:
             char = self.all_spaces[self.selected].inch(1, 3)
-            curses.endwin()
-            if contains_pog(char):
+            # curses.endwin() # why does this need to be here
+            if contains_pog(self, char):
                 move_pog(self)
                 self.reset_cell(self.selected)
-                self.selected = None
-                self.board.refresh()
+                self.end_turn()
             else:
                 self.reset_cell(self.current)
 
         except (ValueError, TypeError):
             self.reset_cell(self.current)
+
+    def end_turn(self):
+        self.selected = None
+        self.board.refresh()
+        self.logic.set('is_turn', not(self.logic.get('is_turn')))
+
 
     def move(self, n):
 
@@ -90,6 +97,5 @@ class Board:
 
         self.current += n
         self.all_spaces[self.current].bkgd(curses.color_pair(3))
-        self.logic.set_is_turn(not(self.logic.get_is_turn()))
 
         return self.all_spaces[self.current].refresh()

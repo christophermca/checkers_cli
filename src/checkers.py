@@ -1,7 +1,6 @@
 import curses
-from board import Board
-from game_logic import Game_logic
-from msg_board import Messenger
+from src.components.board import Board
+from src.dto.game_logic import Game_logic
 
 class Checkers:
     def __init__(self, screen):
@@ -12,6 +11,7 @@ class Checkers:
 
         ###
         # colors pair {pairnumber, fg, bg}
+        ##
 
         # pog colors
         curses.init_pair(1, curses.COLOR_WHITE, 0)
@@ -24,6 +24,8 @@ class Checkers:
 
         ##
         # game
+        ##
+
         self.init_game(screen)
 
     def init_game(self, screen):
