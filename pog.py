@@ -21,7 +21,7 @@ def contains_pog(char) -> bool:
         return char & curses.A_CHARTEXT == ord(pog) & curses.A_CHARTEXT
 
 def move_pog(self) -> None:
-    if self.is_turn:
+    if self.logic.get_is_turn():
         color = self.team.get('color')
     else:
         color = self.ai.get('color')
@@ -31,12 +31,12 @@ def move_pog(self) -> None:
     self.all_spaces[self.selected].noutrefresh()
     self.all_spaces[self.current].addch(1, 3, pog, color)
     self.all_spaces[self.current].noutrefresh()
-    # self.is_turn = not(self.is_turn)
+    self.logic.set_is_turn(not(self.logic.is_turn))
 
 
 def set_pogs(self) -> None:
     # TODO find a smarter way to do this
-    if self.is_turn:
+    if self.logic.is_turn:
         sideA = 1
         sideB = 2
     else:
@@ -50,6 +50,6 @@ def set_pogs(self) -> None:
         if i < 13:
             cell.addch(1, 3, pog, curses.color_pair(sideA))
         if i > 20:
-            cell.addch(1, 3, royal, curses.color_pair(sideB))
+            cell.addch(1, 3, pogB, curses.color_pair(sideB))
 
         cell.noutrefresh()

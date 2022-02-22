@@ -1,7 +1,7 @@
 import curses
-import random
 from board import Board
-
+from game_logic import Game_logic
+from msg_board import Messenger
 
 class Checkers:
     def __init__(self, screen):
@@ -28,7 +28,7 @@ class Checkers:
 
     def init_game(self, screen):
         # This is stupid why do you need to variables?
-        self.is_turn = go_first = random.randint(0, 1)
-        self.board = Board(screen, go_first)
+        self.logic = Game_logic();
+        self.board = Board(screen, self.logic)
 
         curses.doupdate()

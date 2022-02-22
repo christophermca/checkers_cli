@@ -6,9 +6,8 @@ from msg_board import Messenger
 
 
 def main(screen):
-    game = Checkers(screen)
     messngr = Messenger(screen)
-    isRunning = True
+    game = Checkers(screen)
 
     def restart_game():
         curses.beep()
@@ -30,12 +29,12 @@ def main(screen):
         elif c == curses.KEY_DOWN or c == 106:
             game.board.move(4)
 
-    while isRunning:
+    while game.logic.isRunning:
         # controller
         c = screen.getch()
 
         if c == ord('q'):
-            isRunning = False
+            game.logic.set_isRunning(False)
         elif c == ord('r'):
             restart_game()
         elif c == ord('?'):

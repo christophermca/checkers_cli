@@ -12,11 +12,11 @@ class Board:
     bottom = ([15, 8], [15, 24], [15, 40], [15, 56], [18, 0], [18, 16],
               [18, 32], [18, 48], [21, 8], [21, 24], [21, 40], [21, 56])
 
-    def __init__(self, screen, go_first):
+    def __init__(self, screen, logic):
+        self.logic = logic
         self.current = 13
         self.selected = None
         self.all_spaces = list(sum([self.top, self.mid,  self.bottom], ()))
-        self.is_turn = go_first
 
         self.__init_board(screen)
 
@@ -90,6 +90,6 @@ class Board:
 
         self.current += n
         self.all_spaces[self.current].bkgd(curses.color_pair(3))
-        self.is_turn = not(self.is_turn)
+        self.logic.set_is_turn(not(self.logic.get_is_turn()))
 
         return self.all_spaces[self.current].refresh()
