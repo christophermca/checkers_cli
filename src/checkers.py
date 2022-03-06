@@ -1,9 +1,10 @@
 import curses
 from src.components.board import Board
 from src.dto.game_logic import Game_logic
+from src.utils.sdk import debug_curses as debug
 
 class Checkers:
-    def __init__(self, screen):
+    def __init__(game, screen, reset=False):
         # configure curses
         curses.curs_set(0)
         curses.start_color()
@@ -26,11 +27,10 @@ class Checkers:
         # game
         ##
 
-        self.init_game(screen)
+        game.__start(screen, reset)
 
-    def init_game(self, screen):
-        # This is stupid why do you need to variables?
-        self.logic = Game_logic();
-        self.board = Board(screen, self.logic)
+    def __start(game, screen, reset):
+        game.logic = Game_logic({'reset': reset});
+        game.board = Board(screen, game.logic)
 
         curses.doupdate()

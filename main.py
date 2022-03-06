@@ -14,6 +14,7 @@ def main(screen):
         curses.beep()
         messngr.send('CLEAR')
         Checkers(screen)
+        # board.reset()
         time.sleep(1)
         messngr.clear()
 

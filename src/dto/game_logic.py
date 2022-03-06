@@ -18,9 +18,12 @@ class gameDto:
         else:
             self.turn = "ai"
 
-class Game_logic(object):
-    def __init__(self):
+class Game_logic:
+    def __init__(self, props):
         self._data = gameDto(True, bool(__determine_turn__()));
+        if(props is not None):
+            setattr(self._data,'reset', props['reset'])
+
 
     def set(self, key, value):
         setattr(self._data, key, value)

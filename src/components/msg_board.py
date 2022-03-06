@@ -8,6 +8,7 @@ class Messenger:
     def __setwin(self, height=2):
         self.msg_board = curses.newwin(height, 64, 32, 10)
 
+
     def clear(self):
         self.msg_board.clear()
         self.msg_board.refresh()

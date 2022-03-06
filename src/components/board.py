@@ -1,5 +1,6 @@
 import curses
 from .pog import move_pog, contains_pog, set_pogs
+from ..utils.sdk import debug_curses as debug
 import random
 
 
@@ -13,16 +14,16 @@ class Board:
     bottom = ([15, 8], [15, 24], [15, 40], [15, 56], [18, 0], [18, 16],
               [18, 32], [18, 48], [21, 8], [21, 24], [21, 40], [21, 56])
 
-    def __init__(self, screen, logic):
-        self.logic = logic
-        self.current = 13
-        self.selected = None
-        self.all_spaces = list(sum([self.top, self.mid,  self.bottom], ()))
+    def __init__(board, screen, logic):
+        board.logic = logic
+        board.current = 13
+        board.selected = None
+        board.all_spaces = list(sum([board.top, board.mid,  board.bottom], ()))
 
-        self.__init_board__(screen)
+        board.__build(screen)
 
 
-    def __init_board__(self, screen):
+    def __build(self, screen):
         screen.bkgd(curses.ACS_BOARD, curses.COLOR_BLACK)
         screen.noutrefresh()
 
@@ -30,7 +31,7 @@ class Board:
         self.board.bkgd(curses.ACS_BOARD, curses.color_pair(2))
         self.board.noutrefresh()
 
-        def __init_cells__(y, x, i):
+        def __init_cells(y, x, i):
             cell = self.board.derwin(3, 8, y, x)
             cell.bkgd(curses.COLOR_BLACK)
 
@@ -40,10 +41,9 @@ class Board:
             self.all_spaces[i] = cell
 
         for i, sp in enumerate(self.all_spaces):
-            __init_cells__(*sp, i)
+            __init_cells(*sp, i)
 
         set_pogs(self)
-
 
 
     def reset_cell(self, cell):
@@ -55,6 +55,7 @@ class Board:
         if self.selected is None:
             char = self.all_spaces[self.current].inch(1, 3)
             if contains_pog(self, char):
+
                 self.all_spaces[self.current].bkgd(curses.color_pair(4))
                 self.all_spaces[self.current].noutrefresh()
                 self.selected = self.current
@@ -70,7 +71,6 @@ class Board:
 
         try:
             char = self.all_spaces[self.selected].inch(1, 3)
-            # curses.endwin() # why does this need to be here
             if contains_pog(self, char):
                 move_pog(self)
                 self.reset_cell(self.selected)
@@ -88,7 +88,6 @@ class Board:
 
 
     def move(self, n):
-
         self.reset_cell(self.current)
 
         if self.selected:
