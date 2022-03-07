@@ -1,7 +1,6 @@
 import curses
 from .pog import move_pog, contains_pog, set_pogs
 from ..utils.sdk import debug_curses as debug
-import random
 
 
 class Board:

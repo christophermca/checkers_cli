@@ -38,7 +38,9 @@ def main(screen):
         if c == ord('q'):
             game.logic.set('isRunning', False)
         elif c == ord('r'):
-            restart_game()
+            None
+            messngr.send('Key `r` - does nothing')
+            # restart_game()
         elif c == ord('?'):
             messngr.help()
         elif c == curses.KEY_ENTER or c == 10:  # or c == 13:
