@@ -1,5 +1,6 @@
 import curses
 from src.components.board import Board
+from src.components.pog import set_pogs
 from src.dto.game_logic import Game_logic
 from src.utils.sdk import debug_curses as debug
 
@@ -30,7 +31,9 @@ class Checkers:
         game.__start(screen, reset)
 
     def __start(game, screen, reset):
-        game.logic = Game_logic({'reset': reset});
-        game.board = Board(screen, game.logic)
+        game.state = Game_logic({'reset': reset});
+        game.board = Board(screen, game.state)
+
+        set_pogs(game.board)
 
         curses.doupdate()

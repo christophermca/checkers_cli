@@ -14,7 +14,6 @@ def main(screen):
         curses.beep()
         messngr.send('CLEAR')
         Checkers(screen)
-        # board.reset()
         time.sleep(1)
         messngr.clear()
 
@@ -31,21 +30,27 @@ def main(screen):
         elif c == curses.KEY_DOWN or c == 106:
             game.board.move(4)
 
-    while game.logic.get('isRunning'):
+    while game.state.get('isRunning'):
         # controller
         c = screen.getch()
 
         if c == ord('q'):
-            game.logic.set('isRunning', False)
+            game.state.set('isRunning', False)
         elif c == ord('r'):
             None
             messngr.send('Key `r` - does nothing')
+            time.sleep(1)
+            messngr.send('use `q` to quit game and then start a new game')
+            time.sleep(2)
+            messngr.send('sorry')
+            time.sleep(2)
+            messngr.clear()
             # restart_game()
         elif c == ord('?'):
             messngr.help()
         elif c == curses.KEY_ENTER or c == 10:  # or c == 13:
             game.board.select()
-            messngr.send({'turn': game.logic.get('is_turn')})
+            messngr.send({'turn': game.state.get('is_turn')})
         else:
             move_cursor(c)
 
