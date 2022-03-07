@@ -14,7 +14,7 @@ class Board:
               [18, 32], [18, 48], [21, 8], [21, 24], [21, 40], [21, 56])
 
     def __init__(self, screen, logic):
-        self.logic = logic
+        self.state = logic
         self.current = 13
         self.selected = None
         self.all_spaces = list(sum([self._top, self._mid,  self._bottom], ()))

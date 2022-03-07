@@ -16,7 +16,7 @@ def contains_pog(board, char) -> bool:
         if(not bool(char)):
             return False
 
-        if board.logic.get('is_turn'):
+        if board.state.get('is_turn'):
             piece = board.p1.get('pog')
         else:
             piece = board.ai.get('pog')
@@ -49,20 +49,20 @@ def move_pog(board) -> None:
 
 
 
-def set_pogs(board, reset=False) -> None:
+def set_pogs(game, reset=False) -> None:
     # TODO find a smarter way to do this
 
-    if board.logic.get('is_turn'):
+    if game.state.get('is_turn'):
         sideA = 1
         sideB = 2
     else:
         sideA = 2
         sideB = 1
 
-    board.ai = {"pog": pog, "color": curses.color_pair(sideA)}
-    board.p1 = {"pog": pogB, "color": curses.color_pair(sideB)}
+    game.state.ai = {"pog": pog, "color": curses.color_pair(sideA)}
+    game.state.p1 = {"pog": pogB, "color": curses.color_pair(sideB)}
 
-    for i, cell in enumerate(board.all_spaces, start=1):
+    for i, cell in enumerate(game.board.all_spaces, start=1):
         if i < 13:
             cell.addch(1, 3, pog, curses.color_pair(sideA))
         if i > 20:

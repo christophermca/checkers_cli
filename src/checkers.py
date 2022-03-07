@@ -34,6 +34,6 @@ class Checkers:
         game.state = Game_logic({'reset': reset});
         game.board = Board(screen, game.state)
 
-        set_pogs(game.board)
+        set_pogs(game)
 
         curses.doupdate()
