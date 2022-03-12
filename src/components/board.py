@@ -83,7 +83,7 @@ class Board:
     def end_turn(self) -> None:
         self.selected = None
         self.board.refresh()
-        self.logic.set('is_turn', not(self.logic.get('is_turn')))
+        self.state.set('is_turn', not(self.state.get('is_turn')))
 
     def move(self, n) -> None:
         self.reset_cell(self.current)

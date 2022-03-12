@@ -16,10 +16,11 @@ def contains_pog(board, char) -> bool:
         if(not bool(char)):
             return False
 
+
         if board.state.get('is_turn'):
-            piece = board.p1.get('pog')
+            piece = board.state.p1.get('pog')
         else:
-            piece = board.ai.get('pog')
+            piece = board.state.ai.get('pog')
 
 
         # curses.A_CHARTEXT
@@ -34,12 +35,12 @@ def contains_pog(board, char) -> bool:
 
 
 def move_pog(board) -> None:
-    if board.logic.get('is_turn'):
-        color = board.p1.get('color')
-        piece = board.p1.get('pog')
+    if board.state.get('is_turn'):
+        color = board.state.p1.get('color')
+        piece = board.state.p1.get('pog')
     else:
-        color = board.ai.get('color')
-        piece = board.ai.get('pog')
+        color = board.state.ai.get('color')
+        piece = board.state.ai.get('pog')
 
 
     board.all_spaces[board.selected].delch(1, 3)
